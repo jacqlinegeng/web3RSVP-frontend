@@ -2,12 +2,11 @@ import { Web3Storage, File, getFilesFromPath } from "web3.storage";
 const { resolve } = require("path");
 
 export default async function handler(req, res) {
-  if (req.method === "POST") {
+  if (req.method == "POST") {
     return await storeEventData(req, res);
   } else {
-    return res
-      .status(405)
-      .json({ message: "Method not allowed", success: false });
+    return res.status(405)
+              .json({ message: "Method not allowed", success: false })
   }
 }
 
@@ -18,9 +17,8 @@ async function storeEventData(req, res) {
     const cid = await storeFiles(files);
     return res.status(200).json({ success: true, cid: cid });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ error: "Error creating event", success: false });
+    return res.status(500)
+              .json({ error: "Error creating event", success: false })
   }
 }
 
@@ -31,6 +29,7 @@ async function makeFileObjects(body) {
   const files = await getFilesFromPath(imageDirectory);
 
   files.push(new File([buffer], "data.json"));
+
   return files;
 }
 
@@ -41,5 +40,6 @@ function makeStorageClient() {
 async function storeFiles(files) {
   const client = makeStorageClient();
   const cid = await client.put(files);
+
   return cid;
 }

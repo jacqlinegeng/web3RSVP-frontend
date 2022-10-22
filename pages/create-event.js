@@ -9,7 +9,7 @@ import connectContract from "../utils/connectContract";
 import getRandomImage from "../utils/getRandomImage";
 
 export default function CreateEvent() {
-  const { data: account } = useAccount();
+  const { isConnected } = useAccount();
 
   const [eventName, setEventName] = useState("");
   const [eventDate, setEventDate] = useState("");
@@ -77,7 +77,7 @@ export default function CreateEvent() {
         console.log("Minting...", txn.hash);
         let wait = await txn.wait();
         console.log("Minted -- ", txn.hash);
-
+        console.log("Events 0:", wait.events[0]);
         setEventID(wait.events[0].args[0]);
         setSuccess(true);
         setLoading(false);
@@ -141,7 +141,7 @@ export default function CreateEvent() {
             Create your virtual event
           </h1>
         )}
-        {account && !success && (
+        {isConnected && !success && (
           <form
             onSubmit={handleSubmit}
             className="space-y-8 divide-y divide-gray-200"
@@ -323,7 +323,7 @@ export default function CreateEvent() {
             </span>
           </div>
         )}
-        {!account && (
+        {!isConnected && (
           <section className="flex flex-col items-start py-8">
             <p className="mb-4">Please connect your wallet to create events.</p>
             <ConnectButton />
